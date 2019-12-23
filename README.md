@@ -32,7 +32,12 @@ npm run dev
 npm run populate
 ```
 
+If there is any problem with this command, try:
+```bash
+npm install nodemon
+```
+
 ## Contributors
 
-Jean Prouvost
-Jordan Do Barreiro
+Jean Prouvost (SI 04),
+Jordan Do Barreiro (SI 04)

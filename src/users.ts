@@ -1,12 +1,14 @@
 import { LevelDB } from "./leveldb"
 import WriteStream from 'level-ws'
 
+var passwordHash = require('password-hash');
+
 export class User {
   public username: string
   public email: string
   private password: string = ""
 
-  constructor(username: string, email: string, password: string, passwordHashed: boolean = false) {
+  constructor(username: string, email: string, password: string, passwordHashed: boolean = passwordHash.isHashed(password)) {
     this.username = username
     this.email = email
 
@@ -14,17 +16,17 @@ export class User {
       this.setPassword(password)
     } else {
       this.password = password
-    } 
+    }
   }
-  
+
   static fromDb(username: string, value: any): User {
     const [password, email] = value.split(":")
-    return new User(username, email, password) 
+    return new User(username, email, password)
   }
 
   public setPassword(toSet: string): void {
     // Hash and set password
-    this.password = toSet
+    this.password = passwordHash.generate(toSet)
   }
 
   public getPassword(): string {
@@ -33,7 +35,7 @@ export class User {
 
   public validatePassword(toValidate: String): boolean {
     // return comparison with hashed password
-    return this.password == toValidate
+    return passwordHash.verify(toValidate, this.password)
   }
 }
 
@@ -57,7 +59,9 @@ export class UserHandler {
   }
 
   public delete(username: string, callback: (err: Error | null) => void) {
-    // TODO
+    this.db.del(`user:${username}`, (err: Error | null) => {
+      callback(err);
+    });
   }
 
   constructor(path: string) {
