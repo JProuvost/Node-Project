@@ -1,6 +1,7 @@
 import { LevelDB } from "./leveldb"
 import WriteStream from 'level-ws'
 
+
 export class Metric {
   public timestamp: string
   public value: number
@@ -58,7 +59,7 @@ export class MetricsHandler {
     this.db.createReadStream()
       .on('data', function (data) {
         const splitkey = data.key.split(':');
-        if (username === undefined || userHasAccess(username, splitkey[1])) {
+        if (username === undefined) {
           const metricCol = splitkey[2];
           if (!(metricCol in metrics))
             metrics[metricCol] = [];
@@ -89,7 +90,7 @@ export class MetricsHandler {
     // Read
       .on('data', function (data) {
         const user: string = data.key.split(':')[1];
-        if (username === undefined || userHasAccess(username, user)) {
+        if (username === undefined) {
           const colname: string = data.key.split(':')[2];
           const ts = data.key.split(':')[3];
           if (colname === metricCol && (timestamp === undefined || timestamp === ts)) {
