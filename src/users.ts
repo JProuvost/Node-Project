@@ -61,6 +61,6 @@ export class UserHandler {
   }
 
   constructor(path: string) {
-    this.db = LevelDB.open(path)
+    this.db = LevelDB.open(path);
   }
 }
