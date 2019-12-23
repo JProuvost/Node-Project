@@ -12,16 +12,16 @@ export class Metric {
 }
 
 export class MetricsHandler {
-  private db: any 
-  
+  private db: any
+
   constructor(dbPath: string) {
     this.db = LevelDB.open(dbPath)
   }
-  
-  public closeDB(){
+
+  public closeDB() {
     this.db.close()
   }
-  
+
   public save(key: string, metrics: Metric[], callback: (error: Error | null) => void) {
     const stream = WriteStream(this.db)
     stream.on('error', callback)
@@ -31,11 +31,11 @@ export class MetricsHandler {
     })
     stream.end()
   }
-  
+
   public get(key: string, callback: (err: Error | null, result?: Metric[]) => void) {
     const stream = this.db.createReadStream()
     var met: Metric[] = []
-    
+
     stream.on('error', callback)
       .on('data', (data: any) => {
         const [_, k, timestamp] = data.key.split(":")

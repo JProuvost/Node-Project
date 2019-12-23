@@ -6,7 +6,7 @@ const dbPath: string = './db_test'
 var dbMet: MetricsHandler
 
 describe('Metrics', function () {
-  before(function () {
+  before(function () { 
     LevelDB.clear(dbPath)
     dbMet = new MetricsHandler(dbPath)
   })
@@ -14,7 +14,7 @@ describe('Metrics', function () {
   after(function () {
     dbMet.closeDB()
   })
-  
+
   describe('#get', function () {
     it('should get empty array on non existing group', function (done) {
       dbMet.get("0", function (err: Error | null, result?: Metric[]) {
@@ -24,7 +24,7 @@ describe('Metrics', function () {
         done()
       })
     })
-    
+
     it('should save and get', function (done) {
       let metrics: Metric[] = []
       metrics.push(new Metric('12345678', 10))
@@ -33,7 +33,7 @@ describe('Metrics', function () {
           expect(err).to.be.null
           expect(result).to.not.be.undefined
           expect(result).to.not.be.empty
-          if(result)
+          if (result)
             expect(result[0].value).to.equal(10)
           done()
         })
