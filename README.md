@@ -1,14 +1,14 @@
-# Lab 4 Middleware and Unit testing
+# Nodejs Project ECE
 
 ## Introduction
 
-The basic Node.js application on TypeScript.
+Our Nodejs project
 
 ## Installing
 
 ```bash
-git clone https://github.com/sergkudinov/ece-nodejs-4-middleware.git
-cd ece-nodejs-4-middleware
+git clone https://github.com/JProuvost/Node-Project.git
+cd Node-Project
 npm install
 ```
 
@@ -32,4 +32,5 @@ npm run populate
 
 ## Contributors
 
-Sergei Kudinov
+Jean Prouvost
+Jordan Do Barreiro
