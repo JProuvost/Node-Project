@@ -1,5 +1,6 @@
 # Nodejs Project ECE
 
+https://travis-ci.com/JProuvost/Node-Project.svg?branch=master
 
 ## Introduction
 
