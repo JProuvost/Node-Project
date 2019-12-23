@@ -1,7 +1,6 @@
 import { LevelDB } from "./leveldb"
 import WriteStream from 'level-ws'
 
-
 export class Metric {
   public timestamp: string
   public value: number
@@ -13,119 +12,45 @@ export class Metric {
 }
 
 export class MetricsHandler {
-  private db: any
-
+  private db: any 
+  
   constructor(dbPath: string) {
     this.db = LevelDB.open(dbPath)
   }
-
-  public closeDB() {
+  
+  public closeDB(){
     this.db.close()
   }
-
-  public save(key: string, metrics: Metric[], callback: (error: Error | null) => void) {
+  
+  public save(username: string, metrics: Metric[], callback: (error: Error | null) => void) {
     const stream = WriteStream(this.db)
     stream.on('error', callback)
     stream.on('close', callback)
     metrics.forEach((m: Metric) => {
-      stream.write({ key: `metric:${key}:${m.timestamp}`, value: m.value })
+      stream.write({ key: `metric:${username}:${m.timestamp}`, value: m.value })
     })
     stream.end()
   }
-
-  public updateOne(
-    username: string | undefined,
-    metricCol: string,
-    timestamp: string,
-    newValue: number,
-    callback: (error: Error | null) => void) {
-    const fullkey = `metric:${username}:${metricCol}:${timestamp}`;
-    this.db.get(fullkey, (err: Error | null, data: any) => {
-      if (err || data === undefined) callback(err);
-      else {
-        this.db.put(fullkey, newValue, (err: Error | null) => {
-          callback(err);
-        });
-      }
-    });
-  }
-
-  public getAll(callback: (error: Error | null, result: any) => void) {
-    this.getAllFromUser(undefined, callback);
-  }
-
-  public getAllFromUser(username: string | undefined, callback: (error: Error | null, result: any) => void) {
-    let metrics: any = {};
-    this.db.createReadStream()
-      .on('data', function (data) {
-        const splitkey = data.key.split(':');
-        if (username === undefined) {
-          const metricCol = splitkey[2];
-          if (!(metricCol in metrics))
-            metrics[metricCol] = [];
-          const timestamp = splitkey[3];
-          const metric: Metric = new Metric(timestamp, data.value)
-          metrics[metricCol].push(metric);
+  
+  public get(username: string, callback: (err: Error | null, result?: Metric[]) => void) {
+    const stream = this.db.createReadStream()
+    var met: Metric[] = []
+    
+    stream.on('error', callback)
+      .on('data', (data: any) => {
+        console.log(data)
+        let user: string = data.key.split(':')[1];
+        let timestamp: string = data.key.split(':')[2];
+        /*const [_, k, timestamp] = data.key.split(":")*/
+        const value = data.value
+        if (username != user) {
+          console.log(`LevelDB error: ${user} does not match key ${username}`)
+        } else {
+          met.push(new Metric(timestamp, value))
         }
       })
-      .on('error', function (err) {
-        callback(err, null);
+      .on('end', (err: Error) => {
+        callback(null, met)
       })
-      .on('close', function () {
-      })
-      .on('end', function () {
-        callback(null, metrics);
-      });
-  }
-
-  // also gives the full key of that entry in the db
-  public getOne(
-    username: string | undefined,
-    metricCol: string,
-    timestamp: string | undefined,
-    callback: (error: Error | null, result: any, fullKey?: string) => void) {
-    let metrics: Metric[] = [];
-    let fullKey: string | undefined;
-    this.db.createReadStream()
-    // Read
-      .on('data', function (data) {
-        const user: string = data.key.split(':')[1];
-        if (username === undefined) {
-          const colname: string = data.key.split(':')[2];
-          const ts = data.key.split(':')[3];
-          if (colname === metricCol && (timestamp === undefined || timestamp === ts)) {
-            fullKey = data.key;
-            metrics.push(new Metric(ts, data.value));
-          }
-        }
-      })
-      .on('error', function (err) {
-        callback(err, null);
-      })
-      .on('close', function () {
-      })
-      .on('end', function () {
-        callback(null, metrics, fullKey);
-      });
-  }
-
-  public deleteOne(
-    username: string | undefined,
-    metricCol: string,
-    timestamp: string | undefined,
-    callback: (error: Error | null, msg?: string) => void) {
-    this.getOne(
-      username,
-      metricCol,
-      timestamp,
-      (err: Error | null, result: Metric[], fullKey?: string) => {
-      if (err) callback(err);
-      if (fullKey) {
-		this.db.del(fullKey);
-		callback(null, 'success');
-	  } else {
-		callback(null, 'not found');
-	  }
-    });
   }
 }

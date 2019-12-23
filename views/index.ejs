@@ -20,7 +20,7 @@
       e.preventDefault();
       $.getJSON("/metrics/<%= name %>", {}, (data) => {
         const content = data.map(d => {
-          return 'timestamp: ' + d.timestamp + ', value: ' + d.value + '';
+          return 'timestamp: ' + d.timestamp + ', value: ' + d.value + '<br/>';
         })
         $('#metrics').append(content.join("\n"));
       });
