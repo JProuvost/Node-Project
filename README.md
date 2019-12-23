@@ -1,6 +1,6 @@
 # Nodejs Project ECE
 
-<meta name="language" content="Node">
+<meta name="language" content="javascript">
 
 
 ## Introduction
