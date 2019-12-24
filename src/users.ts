@@ -67,4 +67,8 @@ export class UserHandler {
   constructor(path: string) {
     this.db = LevelDB.open(path)
   }
+
+  public closeDB(){
+    this.db.close()
+  }
 }
