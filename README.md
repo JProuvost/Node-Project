@@ -81,4 +81,5 @@ Heroku deploys automatically the new version aafter each succesful push on the m
 ## Contributors
 
 [**Jean Prouvost**](https://github.com/JProuvost) (SI 04)
+
 [**Jordan Do Barreiro**](https://github.com/jordan-dobarreiro)  (SI04)
