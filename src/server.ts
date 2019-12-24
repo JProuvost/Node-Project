@@ -117,6 +117,13 @@ app.post('/metrics/:id', (req: any, res: any) => {
   })
 })
 
+app.post('/metrics/delete/:id', (req: any, res: any) => {
+  dbMet.delete('metric:'+req.params.id+':'+req.body.timestamp, (err: Error | null) => {
+    if (err) throw err
+    res.status(200).send(`Metric deleted successfully`)
+  })
+})
+
 /* Start server */
 
 const authCheck = function (req: any, res: any, next: any) {

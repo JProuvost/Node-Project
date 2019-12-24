@@ -15,19 +15,32 @@
     </button>
     <div id="metrics"></div>
   </div>
-  <div class="container" id="oui">
+  <div class="container">
     <hr />
-    <form id="add-metric" action="/metrics/<%= name %>" method="post">
-      <div class="form-group">
-        <input id="timestamp" name="timestamp" type="hidden">
-        <label for="form_value">Value</label>
-        <input id="form_value" type="text" name="value" required />
-      </div>
-      <button class="btn btn-primary" type="submit" value="Submit">
-        Add a metric
-      </button>
-    </form>
+    <div id="add">
+      <form id="add-metric" action="/metrics/<%= name %>" method="post">
+        <div class="form-group">
+          <input id="timestamp" name="timestamp" type="hidden">
+          <label for="form_value">Value</label>
+          <input id="form_value" type="text" name="value" required />
+        </div>
+        <button class="btn btn-primary" type="submit" value="Submit">
+          Add a metric
+        </button>
+      </form>
+    </div>
     <hr />
+    <div id="del">
+      <form id="del-metric" action="/metrics/delete/<%= name %>" method="post">
+        <div class="form-group">
+          <label for="timestamp">Timestamp</label>
+          <input id="timestamp" type="text" name="timestamp" required>
+        </div>
+        <button class="btn btn-primary" type="submit" value="Submit">
+          Delete metric
+        </button>
+      </form>
+    </div>
   </div>
   <script>
     $('#show-metrics').click((e) => {
@@ -48,7 +61,21 @@
           type: 'POST',
           data: $(this).serialize(),
           success: function (data) {
-            $("#oui").html(data).addClass("alert alert-success");
+            $("#add").html(data).addClass("alert alert-success");
+            location.reload();
+          }
+        });
+      });
+    });
+    $(document).ready(function () {
+      $("#del-metric").submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+          url: $(this).attr('action'),
+          type: 'POST',
+          data: $(this).serialize(),
+          success: function (data) {
+            $("#del").html(data).addClass("alert alert-success");
             location.reload();
           }
         });
