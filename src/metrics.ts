@@ -38,10 +38,8 @@ export class MetricsHandler {
     
     stream.on('error', callback)
       .on('data', (data: any) => {
-        console.log(data)
         let user: string = data.key.split(':')[1];
         let timestamp: string = data.key.split(':')[2];
-        /*const [_, k, timestamp] = data.key.split(":")*/
         const value = data.value
         if (username != user) {
           console.log(`LevelDB error: ${user} does not match key ${username}`)

@@ -24,7 +24,9 @@ describe('Metrics', function () {
         done()
       })
     })
+  })
 
+  describe('#get & #save', function () {
     it('should save and get', function (done) {
       let metrics: Metric[] = []
       metrics.push(new Metric('12345678', 10))
