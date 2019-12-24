@@ -25,7 +25,7 @@ To transpile the typescript files into javascript files, run:
 npm run build
 ```
 ## Run
-There is several ways to run this project:
+There are several ways to run this project:
 
 If there is need for development to be done, run:
 ```bash
@@ -71,13 +71,13 @@ docker-compose up
 
 This project was developped with Travis-CI as CI support.
 
-For every push on the master branch, Travis verify if the project builds properly, if the scripts work accordingly and push the new docker image to docker hub.
+For every push on the master branch, Travis verifies if the project builds properly, if the scripts work accordingly and push the new docker image to docker hub.
 
 ## Deployment with Heroku
 
 The app is deployed on Heroku [here](https://ecenodeproject.herokuapp.com/login)
 
-Heroku deploys automatically the new version aafter each succesful push on the master branch that satisfies the test realised by Travis.
+Heroku deploys automatically the new version after each successful push on the master branch that satisfies the test realised by Travis.
 ## Contributors
 
 [**Jean Prouvost**](https://github.com/JProuvost) (SI 04)
