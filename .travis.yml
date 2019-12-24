@@ -6,6 +6,8 @@ services:
 - docker
 before_script:
 - npm install
+- npm build
+- npm populate
 script:
 - npm test
 - docker build -t nodeproject_web .
@@ -13,11 +15,3 @@ after_success:
 - docker login -u $USER -p $PASSWORD
 - docker tag nodeproject_web $USER/nodeproject_web
 - docker push $USER/nodeproject_web
-deploy:
-  provider: heroku
-  api_key:
-          secure: o1X9vcmeuMXyWdWrB66hJFrqsmjxitt5vnY/tGQFAD4bOukf0XJuq/xQiSoeU53+R+bHvepZulaEKO3akXnQ0l/JNp/TA95HC5/neA+89Ti0/p56euo1hCTsK/9K+VFokYSCe1yaYIO2f0j58X2mCLDZ9aT8ZcE6gJZgmV4KZ6k0MkDlq3vcnWhqIbh8scqBkedzTkAu2YhH2+YBsClGZZIQdH2HIsqjx+Vx7jsBGew6eis5ptRONMEfmEArZRezQBGnJQeXjuj6cBI54EbEAQzGIFverMNKdAXD17GsibuBu6JNlich4Zdvor17WrEEBAP4UT/mQNwzQa5Ag8RZAQi6XIU8R0pajKYKLrvL8GAcBOjl8fq5jl7l6mLje+fv0/QN2uVHGQCbukzZPwmAXmcW1Hpc8366JxBhVv+qnvDJX/SIJsUtZSqH9sfeJV2m3UpGW2PuCIPyOEB4DaNBgFLGU25ok00nUQm5oeOiYXzvxhwuoaoEgCJxdgSVtPpfjW5n+rF4alXcv46Y7Q5e4kDUHgwjg7jySI16k1vF5q0gnLvsoJ0LvM4y5GvmyRoBT7o2Df7oUhhxoTfjw5se8kktfHH8pSGlEUihJxW2bs/zvh9s8Z0rNngutUBSeZyeEKBY7XFsdImMLYE0DyCEhmkQ2AH/+g02mEFCjLA5HHg=
-  app:
-    master: ecenodeproject
-  on:
-    repo: JProuvost/Node-Project
