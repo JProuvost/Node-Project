@@ -1,5 +1,5 @@
 import express = require('express')
-import { MetricsHandler } from './metrics'
+import { MetricsHandler, Metric } from './metrics'
 import path = require('path')
 import fs = require('fs')
 import bodyparser = require('body-parser')
@@ -110,9 +110,10 @@ app.get('/metrics/:id', (req: any, res: any) => {
 })
 
 app.post('/metrics/:id', (req: any, res: any) => {
-  dbMet.save(req.params.id, req.body, (err: Error | null) => {
+  var metric = [new Metric(req.body.timestamp, req.body.value)];
+  dbMet.save(req.params.id, metric, (err: Error | null) => {
     if (err) throw err
-    res.status(200).send()
+    res.status(200).send(`Metric added successfully`)
   })
 })
 

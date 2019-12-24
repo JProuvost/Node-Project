@@ -48,6 +48,20 @@ var UserHandler = /** @class */ (function () {
             }
         });
     };
+    UserHandler.prototype.getAll = function (callback) {
+        var stream = this.db.createReadStream();
+        var users = [];
+        stream.on('error', callback)
+            .on('data', function (data) {
+            //console.log(data)
+            var username = data.key.split(':')[1];
+            //console.log(username)
+            users.push(User.fromDb(username, data.value));
+        })
+            .on('end', function (err) {
+            callback(null, users);
+        });
+    };
     UserHandler.prototype.save = function (user, callback) {
         this.db.put("user:" + user.username, user.getPassword() + ":" + user.email, function (err) {
             callback(err);
@@ -57,6 +71,9 @@ var UserHandler = /** @class */ (function () {
         this.db.del("user:" + username, function (err) {
             callback(err);
         });
+    };
+    UserHandler.prototype.closeDB = function () {
+        this.db.close();
     };
     return UserHandler;
 }());

@@ -51,4 +51,10 @@ export class MetricsHandler {
         callback(null, met)
       })
   }
+
+  public delete(key: string, callback: (err: Error | null) => void) {
+    this.db.del(key, (err: Error | null) => {
+      callback(err);
+    });
+  }
 }

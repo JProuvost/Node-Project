@@ -34,10 +34,8 @@ var MetricsHandler = /** @class */ (function () {
         var met = [];
         stream.on('error', callback)
             .on('data', function (data) {
-            console.log(data);
             var user = data.key.split(':')[1];
             var timestamp = data.key.split(':')[2];
-            /*const [_, k, timestamp] = data.key.split(":")*/
             var value = data.value;
             if (username != user) {
                 console.log("LevelDB error: " + user + " does not match key " + username);
