@@ -52,6 +52,22 @@ export class UserHandler {
     })
   }
 
+  public getAll(callback: (err: Error | null, result?: User[]) => void) {
+    const stream = this.db.createReadStream()
+    var users: User[] = []
+    
+    stream.on('error', callback)
+      .on('data', (data: any) => {
+        //console.log(data)
+        let username: string = data.key.split(':')[1]
+        //console.log(username)
+        users.push(User.fromDb(username, data.value))
+      })
+      .on('end', (err: Error) => {
+        callback(null, users)
+      })
+  }
+
   public save(user: User, callback: (err: Error | null) => void) {
     this.db.put(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
       callback(err)
@@ -66,5 +82,9 @@ export class UserHandler {
 
   constructor(path: string) {
     this.db = LevelDB.open(path);
+  }
+
+  public closeDB(){
+    this.db.close()
   }
 }

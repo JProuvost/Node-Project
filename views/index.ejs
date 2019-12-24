@@ -8,23 +8,52 @@
   <div class="col-md-6 col-md-offset-3">
     <h1>Hello <%= name %></h1>
     <button class="btn btn-success" id="show-metrics">
-      Bring the metrics
+      Show the metrics
     </button>
     <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
       Logout
     </button>
     <div id="metrics"></div>
   </div>
+  <div class="container" id="oui">
+    <hr />
+    <form id="add-metric" action="/metrics/<%= name %>" method="post">
+      <div class="form-group">
+        <input id="timestamp" name="timestamp" type="hidden">
+        <label for="form_value">Value</label>
+        <input id="form_value" type="text" name="value" required />
+      </div>
+      <button class="btn btn-primary" type="submit" value="Submit">
+        Add a metric
+      </button>
+    </form>
+    <hr />
+  </div>
   <script>
     $('#show-metrics').click((e) => {
       e.preventDefault();
       $.getJSON("/metrics/<%= name %>", {}, (data) => {
         const content = data.map(d => {
-          return 'timestamp: ' + d.timestamp + ', value: ' + d.value + '';
+          return 'timestamp: ' + d.timestamp + ', value: ' + d.value + '<br/>';
         })
         $('#metrics').append(content.join("\n"));
       });
     })
+    $(document).ready(function () {
+      $("#add-metric").submit(function (event) {
+        event.preventDefault();
+        $("#timestamp").val(new Date().getTime());
+        $.ajax({
+          url: $(this).attr('action'),
+          type: 'POST',
+          data: $(this).serialize(),
+          success: function (data) {
+            $("#oui").html(data).addClass("alert alert-success");
+            location.reload();
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>

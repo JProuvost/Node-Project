@@ -4,7 +4,7 @@
   "description": "Our Node Project",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -r ts-node/register test/*.test.ts",
+    "test": "./node_modules/.bin/mocha -r ts-node/register src/test/*.test.ts",
     "start": "./node_modules/.bin/ts-node src/server.ts",
     "start_js": "node dist/server.js",
     "build": "./node_modules/.bin/tsc -p tsconfig.json",
