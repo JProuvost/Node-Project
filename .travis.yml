@@ -1,6 +1,26 @@
 language: node_js
 node_js:
 - 8.1
+
+sudo: required
+
+services: 
+  - docker
+
+before_script :
+  -npm install
+
+script:
+  - npm test
+  - docker build -t nodeproject_web .
+
+after_success:
+  - docker login -u $USER -p $PASSWORD
+  - docker tag nodeproject_web $USER/nodeproject_web
+  - docker push $USER/nodeproject_web
 deploy:
+  provider: heroku
   api_key:
     secure: $SECURITY_KEY
+  app:
+    master: ecenodeproject
