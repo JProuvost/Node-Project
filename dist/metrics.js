@@ -37,15 +37,31 @@ var MetricsHandler = /** @class */ (function () {
             var user = data.key.split(':')[1];
             var timestamp = data.key.split(':')[2];
             var value = data.value;
-            if (username != user) {
-                console.log("LevelDB error: " + user + " does not match key " + username);
-            }
-            else {
+            if (username === user) {
                 met.push(new Metric(timestamp, value));
             }
         })
             .on('end', function (err) {
             callback(null, met);
+        });
+    };
+    MetricsHandler.prototype.delete = function (key, callback) {
+        this.db.del(key, function (err) {
+            callback(err);
+        });
+    };
+    MetricsHandler.prototype.edit = function (username, timestamp, value, callback) {
+        var key = "metric:" + username + ":" + timestamp;
+        this.delete(key, function (err) {
+            if (err)
+                throw err;
+        });
+        var metric = [
+            new Metric("" + new Date().getTime(), parseFloat(value))
+        ];
+        this.save(username, metric, function (err) {
+            if (err)
+                throw err;
         });
     };
     return MetricsHandler;

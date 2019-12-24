@@ -41,6 +41,20 @@
         </button>
       </form>
     </div>
+    <hr />
+    <div id="edit">
+      <form id="edit-metric" action="/metrics/edit/<%= name %>" method="post">
+        <div class="form-group">
+          <label for="timestamp">Timestamp of the metric to edit</label>
+          <input id="timestamp" type="text" name="timestamp" required>
+          <label for="value">New value</label>
+          <input id="value" type="text" name="value" required>
+        </div>
+        <button class="btn btn-primary" type="submit" value="Submit">
+          Edit metric
+        </button>
+      </form>
+    </div>
   </div>
   <script>
     $('#show-metrics').click((e) => {
@@ -76,6 +90,20 @@
           data: $(this).serialize(),
           success: function (data) {
             $("#del").html(data).addClass("alert alert-success");
+            location.reload();
+          }
+        });
+      });
+    });
+    $(document).ready(function () {
+      $("#edit-metric").submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+          url: $(this).attr('action'),
+          type: 'POST',
+          data: $(this).serialize(),
+          success: function (data) {
+            $("#edit").html(data).addClass("alert alert-success");
             location.reload();
           }
         });

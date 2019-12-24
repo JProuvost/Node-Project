@@ -96,10 +96,26 @@ app.get('/metrics/:id', function (req, res) {
     });
 });
 app.post('/metrics/:id', function (req, res) {
-    dbMet.save(req.params.id, req.body, function (err) {
+    var metric = [new metrics_1.Metric(req.body.timestamp, req.body.value)];
+    dbMet.save(req.params.id, metric, function (err) {
         if (err)
             throw err;
-        res.status(200).send();
+        res.status(200).send("Metric added successfully");
+    });
+});
+app.post('/metrics/delete/:id', function (req, res) {
+    dbMet.delete('metric:' + req.params.id + ':' + req.body.timestamp, function (err) {
+        if (err)
+            throw err;
+        res.status(200).send("Metric deleted successfully");
+    });
+});
+app.post('/metrics/edit/:id', function (req, res) {
+    dbMet.edit(req.params.id, req.body.timestamp, req.body.value, function (err) {
+        res.status(200).send("Metric edited successfully");
+        if (err)
+            throw err;
+        res.status(200).send("Metric edited successfully");
     });
 });
 /* Start server */

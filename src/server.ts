@@ -124,6 +124,14 @@ app.post('/metrics/delete/:id', (req: any, res: any) => {
   })
 })
 
+app.post('/metrics/edit/:id', (req: any, res: any) => {
+  dbMet.edit(req.params.id, req.body.timestamp, req.body.value, (err: Error | null) => {
+    res.status(200).send(`Metric edited successfully`)
+    if (err) throw err
+    res.status(200).send(`Metric edited successfully`)
+  })
+})
+
 /* Start server */
 
 const authCheck = function (req: any, res: any, next: any) {
