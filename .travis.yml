@@ -6,8 +6,8 @@ services:
 - docker
 before_script:
 - npm install
-- npm build
-- npm populate
+- npm run build
+- npm run populate
 script:
 - npm test
 - docker build -t nodeproject_web .
