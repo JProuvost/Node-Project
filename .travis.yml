@@ -1,26 +1,21 @@
 language: node_js
 node_js:
-- "11.6"
-
+- '11.6'
 sudo: required
-
-services: 
-  - docker
-
-before_script :
-  - npm install
-
+services:
+- docker
+before_script:
+- npm install
 script:
-  - npm test
-  - docker build -t nodeproject_web .
-
+- npm test
+- docker build -t nodeproject_web .
 after_success:
-  - docker login -u $USER -p $PASSWORD
-  - docker tag nodeproject_web $USER/nodeproject_web
-  - docker push $USER/nodeproject_web
+- docker login -u $USER -p $PASSWORD
+- docker tag nodeproject_web $USER/nodeproject_web
+- docker push $USER/nodeproject_web
 deploy:
   provider: heroku
   api_key:
-    secure: $SECURITY_KEY
+    secure: oOxvQwioHeg18YJMUqhzv5A2I6oLCbQBXYE3WvHZekIyGYFvEL59H6U7OT4ToYfVpist6MkMsGg59I4TrMcmDOp7OPwUUiWhzKsAsMdg8eRYCWRxAcbamzo8JDSbEaESxFJ2dvJtsDwIngdNfUgiCjaYFzWktfWorCdh3N4to6MgIQjzDX57RyxJGki7Pts9MM34+z/V7H+T+PuncUlVOxskE5kFdvraacmtoyClaFuaTDndAgrAaVdobgXm0qCvpQqlalDS4J/RGPPxn+0aWS/fImZQfznsXGW9Qdh/RFbuqYBfmxVVyvktV63qGImNMGTbAfx0hLWat7MzMqnpMRuiQBMoBnOa+NuZqd/mRK6WitBwfILirXjWyAgyFAKdVnk+pWTXhChnkTIqTRWZf6GgVJrZsW9uaMzzZ8nZapMHgiXnu71m9Fhc6laQlolcLJTerYXcuSHWfvnX+thl8SOi9JD+LZ9abU+Z8RDK8kY0D2krkKmXAMaSe5AQEpeM6AJqva0bbADs/EV4Oqr+A8nK7VL3J22Im7w0RUggBc1w7r4988lJNiYSKB7McdUV93X77SYVsDdxKx+2KUCqSw+DSO+nRv2lP8bIOGyVonHSq0pJLRHHeA04/Eu16orIxVDeBPtx3UT++pdr30wrN06fMRKSelPRfD6dO2szUzU=
   app:
     master: ecenodeproject
